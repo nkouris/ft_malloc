@@ -36,7 +36,9 @@ RES = \033[0m
 ################################################################################
 
 SRC =	\
-	main
+	main \
+	mtag \
+	ft_malloc
 
 all: $(LIB) $(NAME)
 
@@ -44,7 +46,7 @@ debug: CFLAGS += -g -fsanitize=address -fsanitize=null -DDEBUG
 debug: $(LIBDEBUG)
 debug: $(NAME)
 
-$(NAMENM): $(OBJSRC)
+$(NAME): $(OBJSRC)
 	@ echo "$(CYAN)Compiling binary$(RES)"
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJSRC) $(LINK) -o $(NAME)
 	@ echo "$(GREEN)$(NAME) Made$(RES)"
@@ -66,7 +68,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	make fclean -C lib/
+	rm -f lib/$(LIB)
 	@ echo "$(RED)Removing program...$(RES)"
 
 re: fclean all
