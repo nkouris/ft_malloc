@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 13:13:53 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/01 15:17:00 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/01 18:37:59 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ static void	*segmap(size_t size, int32_t seg_t)
 void	*ft_malloc(size_t size)
 {
 	void	*ret;
-
+#ifdef DEBUG
+	ft_printf("<----ALLOC---->\n");
+#endif
 	if (!size)
 		return (NULL);
 	if (size <= TINY || size <= SMALL)

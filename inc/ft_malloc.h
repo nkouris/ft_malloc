@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 11:51:12 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/01 15:17:00 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/01 18:37:59 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # define EMPTYSEGS 0
 # define PAGEMAPS 1
 
+#define HTAG ((t_hdc *)tag)
+#define MTAG ((t_mtag *)tag)
+
 extern void			*g_tracksegs[2];
 
 typedef struct	s_hdc
@@ -40,7 +43,7 @@ typedef struct	s_hdc
 
 typedef struct	s_mtag
 {
-	void		*pghead;
+	void		*map_head;
 	void		*parent;
 	void		*left;
 	void		*right;
