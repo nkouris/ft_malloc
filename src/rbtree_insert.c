@@ -6,11 +6,11 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 20:27:18 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 11:07:01 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 13:41:06 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_rbtree.h"
+#include "ft_malloc.h"
 
 static t_rbnode	*ft_rbinsert_rassoc_rot(t_rbnode *node, t_rbtree *tree)
 {

@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 16:42:48 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/01 18:38:00 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 13:41:01 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static inline __attribute__((always_inline))int	freeseg_delim_init(void *tag)
 	meta_init(head, tag);
 	MTAG->size = unused;
 /* add to free tree needed */
+	ft_rbinsert(
 	return (EXIT_SUCCESS);
 }
 

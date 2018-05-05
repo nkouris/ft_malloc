@@ -6,11 +6,11 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 20:02:29 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 10:56:15 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 12:03:17 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_rbtree.h"
+#include "ft_malloc.h"
 
 static inline __attribute__((always_inline))t_rbnode	
 			*del_rrot(t_rbnode *temp, t_rbnode *move, t_rbtree *tree)

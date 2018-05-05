@@ -6,11 +6,11 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 11:08:52 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 11:09:04 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 12:03:53 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_rbtree.h"
+#include "ft_malloc.h"
 
 static inline __attribute__((always_inline))t_rbnode	
 *ft_subdeletemov(t_rbtree *tree, t_rbnode *move, t_rbnode *node,

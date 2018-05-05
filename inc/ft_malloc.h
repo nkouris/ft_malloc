@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 11:51:12 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 11:24:11 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 13:41:03 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define USED 0x04
 # define UNUSED 0x08
 
+# define RED 0x01
+# define BLACK 0x02
 # define EMPTYSEGS 0
 # define PAGEMAPS 1
 
@@ -37,33 +39,33 @@
 
 extern void		*g_tracksegs[2];
 
-typedef struct	s_hdc
+typedef struct		s_hdc
 {
-	void		*next;
-	uint16_t	nummap;
-	uint16_t	segcount;
-}				t_hdc;
+	void			*next;
+	uint16_t		nummap;
+	uint16_t		segcount;
+}					t_hdc;
 
-typedef struct	s_mtag
+typedef struct		s_mtag
 {
-	void		*map_head;
-	void		*parent;
-	void		*left;
-	void		*right;
-	uint64_t	size;
-	uint8_t		color;
-	uint8_t		condition;
-}				t_mtag;
+	void			*map_head;
+	void			*parent;
+	void			*left;
+	void			*right;
+	uint64_t		size;
+	uint8_t			color;
+	uint8_t			condition;
+}					t_mtag;
 
-typedef struct	s_rbnode
+typedef struct		s_rbnode
 {
-	void		*pad;
-	void		*parent;
-	void		*left;
-	void		*right;
-	uint64_t	content;
-	uint8_t		color;
-}				t_rbnode;
+	void			*padding;
+	struct s_rbnode	*parent;
+	struct s_rbnode	*left;
+	struct s_rbnode	*right;
+	uint64_t		content;
+	uint8_t			color;
+}					t_rbnode;
 
 typedef struct		s_rbtree
 {

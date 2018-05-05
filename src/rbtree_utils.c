@@ -6,11 +6,11 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 20:39:29 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 11:25:58 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 12:07:05 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_rbtree.h"
+#include "ft_malloc.h"
 
 t_rbnode	*ft_rbnewnode(int content)
 {
