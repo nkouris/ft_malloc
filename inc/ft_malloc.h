@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 11:51:12 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 13:41:03 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/06 18:29:14 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <sys/mman.h>
 # include <errno.h>
+# include <signal.h>
 # include "libft.h"
 
 # define TINY 128
@@ -24,38 +25,20 @@
 # define NORM 1
 # define LARGE 1025
 
-# define RED 0x1
-# define BLACK 0x2
-# define USED 0x04
-# define UNUSED 0x08
+# define RED 1
+# define BLACK 2
+# define USED 4
+# define UNUSED 8
 
-# define RED 0x01
-# define BLACK 0x02
 # define EMPTYSEGS 0
 # define PAGEMAPS 1
 
 # define HTAG ((t_hdc *)tag)
+# define G_HTAG ((t_hdc *)g_tracksegs[EMPTYSEGS])
 # define MTAG ((t_mtag *)tag)
+# define NTAG ((t_mtag *)next)
 
-extern void		*g_tracksegs[2];
-
-typedef struct		s_hdc
-{
-	void			*next;
-	uint16_t		nummap;
-	uint16_t		segcount;
-}					t_hdc;
-
-typedef struct		s_mtag
-{
-	void			*map_head;
-	void			*parent;
-	void			*left;
-	void			*right;
-	uint64_t		size;
-	uint8_t			color;
-	uint8_t			condition;
-}					t_mtag;
+extern void			*g_tracksegs[2];
 
 typedef struct		s_rbnode
 {
@@ -72,17 +55,38 @@ typedef struct		s_rbtree
 	t_rbnode		*root;
 }					t_rbtree;
 
+typedef struct		s_hdc
+{
+	void			*root;
+	void			*next;
+	uint16_t		nummap;
+	uint16_t		segcount;
+}					t_hdc;
+
+typedef struct		s_mtag
+{
+	void			*map_head;
+	void			*parent;
+	void			*left;
+	void			*right;
+	uint64_t		size;
+	uint8_t			color;
+	uint8_t			condition;
+}					t_mtag;
+
 /*
 **	ft_malloc.c
 */
 
 void	*ft_malloc(size_t size);
 
+void	ft_free(void *ptr);
 /*
 **	mtag.c
 */
 
 void	pagemeta_init(void *head, size_t nummap, size_t size);
+void	freeseg_use(void *tag, size_t size);
 
 /*
 **	rbtree logic

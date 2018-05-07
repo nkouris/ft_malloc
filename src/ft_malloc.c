@@ -6,13 +6,41 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 13:13:53 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 13:41:02 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/06 18:29:15 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
 
-void	*g_freesegs[2] = {NULL, NULL};
+void	*g_tracksegs[2] = {NULL, NULL};
+
+static inline __attribute__((always_inline))void	*openseg(size_t size)
+{
+	t_rbtree	*tree;
+	t_rbnode	*temp;
+
+	tree = g_tracksegs[EMPTYSEGS];
+	temp = tree->root;
+#ifdef DEBUG
+	ft_printf("pull from tree : <%p> node : <%p>\n", tree, temp);
+#endif
+	while (temp)
+	{
+		if ((temp->content - sizeof(t_mtag)) > (size + 10))
+		{
+#ifdef DEBUG
+	ft_printf("<----Resuse mem---->\n");
+#endif
+			if (temp != tree->root)
+				ft_rbdelete(tree, temp);
+			freeseg_use(temp, size);
+			break ;
+		}
+		else
+			temp = temp->right;
+	}
+	return (temp);
+}
 
 static inline __attribute__((always_inline))size_t	segment_out(size_t pagesize,
 		int32_t seg_t, size_t size)
@@ -41,11 +69,14 @@ static void	*segmap(size_t size, int32_t seg_t)
 	ft_printf("size : %d\tseg_type : %s\n", size,
 			(seg_t == NORM ? "NORM" : "LARGE"));
 #endif
-	if (g_freesegs[EMPTYSEGS] != NULL)
+	if (g_tracksegs[EMPTYSEGS] != NULL)
 	{
-		//if ((ret = openseg()))
-		//	return (ret);
+		if ((ret = openseg(size)))
+			return (ret);
 	}
+#ifdef DEBUG
+	ft_printf("<----ALLOC---->\n");
+#endif
 	pagesize = (size_t)getpagesize();
 	nummap = segment_out(pagesize, seg_t, size);
 	if ((ret = mmap(NULL, (pagesize * nummap),
@@ -53,7 +84,7 @@ static void	*segmap(size_t size, int32_t seg_t)
 		== MAP_FAILED)
 		return (NULL);
 #ifdef DEBUG
-	ft_printf("number of maps : %d\n", nummap);
+	ft_printf("Number of pages : %d\n", nummap);
 #endif
 	pagemeta_init(ret, nummap, size);
 	return ((ret + sizeof(t_mtag)));
@@ -61,11 +92,9 @@ static void	*segmap(size_t size, int32_t seg_t)
 
 void	*ft_malloc(size_t size)
 {
-	void	*ret;
-#ifdef DEBUG
-	ft_printf("<----ALLOC---->\n");
-#endif
-	if (!size)
+	void		*ret;
+
+if (!size)
 		return (NULL);
 	if (size <= TINY || size <= SMALL)
 		ret = segmap(size, NORM);
@@ -76,5 +105,8 @@ void	*ft_malloc(size_t size)
 		perror(strerror(errno));
 		return (NULL);
 	}
+#ifdef DEBUG
+	ft_printf("Pointer passed to user : <%p>\n", ret);
+#endif
 	return (ret);
 }

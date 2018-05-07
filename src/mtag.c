@@ -6,7 +6,7 @@
 /*   By: nkouris <nkouris@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/29 16:42:48 by nkouris           #+#    #+#             */
-/*   Updated: 2018/05/05 13:41:01 by nkouris          ###   ########.fr       */
+/*   Updated: 2018/05/05 17:49:10 by nkouris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ static inline __attribute__((always_inline))void	meta_init(void *head,
 	MTAG->parent = NULL;
 	MTAG->left = NULL;
 	MTAG->right = NULL;
+	MTAG->color = RED;
+	MTAG->condition = 0;
 }
+
+	/* determine where you are in the page and figure whether or not to
+	 * create new tag */
 
 static inline __attribute__((always_inline))int	freeseg_delim_init(void *tag)
 {
@@ -36,29 +41,39 @@ static inline __attribute__((always_inline))int	freeseg_delim_init(void *tag)
 	ft_printf("Size of used seg : <%d>\nPotential unused : %lld\n", MTAG->size,
 			unused);
 #endif
-	/* determine where you are in the page and figure whether or not to
-	 * create new tag */
 	tag += sizeof(t_mtag) + MTAG->size;
 	meta_init(head, tag);
 	MTAG->size = unused;
-/* add to free tree needed */
-	ft_rbinsert(
+	MTAG->condition |= UNUSED;
+#ifdef DEBUG
+	ft_printf("node to insert: <%p>\n", tag);
+#endif
+	ft_rbinsert(g_tracksegs[EMPTYSEGS], tag);
 	return (EXIT_SUCCESS);
 }
 
-/*
-void	segmeta_init(void *tag, size_t size)
+void		freeseg_use(void *tag, size_t size)
 {
-	if ((unused = ((nummap * pagesize) - ((tag + sizeof(t_mtag) + MTAG->size) - head))) < (sizeof(t_mtag) + 10))
-	{
-		MTAG->size += unused;
-		return (EXIT_FAILURE);
-	}
-	else
-		tag += sizeof(t_mtag) + MTAG->size;
-	
+	void		*head;
+	uint64_t	unused;
+
+	head = MTAG->map_head;
+	unused = ((MTAG->size) - (sizeof(t_mtag) + size));
+	MTAG->size = size;
+	MTAG->condition |= USED;
+#ifdef DEBUG
+	ft_printf("Size of used seg : <%d>\nPotential unused : %lld\n", MTAG->size,
+			unused);
+#endif
+	tag += sizeof(t_mtag) + MTAG->size;
+	meta_init(head, tag);
+	MTAG->size = unused;
+	MTAG->condition |= UNUSED;
+#ifdef DEBUG
+	ft_printf("node to insert: <%p>\n", tag);
+#endif
+	ft_rbinsert(g_tracksegs[EMPTYSEGS], tag);
 }
-*/
 
 void	pagemeta_init(void *head, size_t nummap, size_t size)
 {
@@ -67,18 +82,21 @@ void	pagemeta_init(void *head, size_t nummap, size_t size)
 
 	i = 0;
 	tag = head;
-	HTAG->segcount = 1;
 	HTAG->nummap = nummap;
+	HTAG->segcount = 1;
+	HTAG->root = NULL;
+	if (g_tracksegs[EMPTYSEGS] == NULL)
+		g_tracksegs[EMPTYSEGS] = head;
 	tag += sizeof(t_hdc);
 	meta_init(head, tag);
 #ifdef DEBUG
 	ft_printf("Map head : <%p>\t@ meta : <%p>\t", MTAG->map_head, MTAG);
 #endif
 	MTAG->size = size;
+	MTAG->condition |= USED;
 	freeseg_delim_init(tag);
-	tag += sizeof(t_mtag) + MTAG->size;
 #ifdef DEBUG
-	ft_printf("Size of free seg : <%d>\n", MTAG->size);
+	tag += sizeof(t_mtag) + MTAG->size;
+	ft_printf("Free seg added : <%p>\tSize of free seg : <%d>\n", tag, MTAG->size);
 #endif
-//	}
 }

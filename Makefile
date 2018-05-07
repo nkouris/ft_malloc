@@ -38,7 +38,12 @@ RES = \033[0m
 SRC =	\
 	main \
 	mtag \
-	ft_malloc
+	ft_malloc \
+	ft_free \
+    rbtree_delete \
+    rbtree_delstart \
+    rbtree_insert \
+    rbtree_utils
 
 all: $(LIB) $(NAME)
 
